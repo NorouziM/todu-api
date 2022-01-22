@@ -5,11 +5,11 @@ const { Schema } = mongoose;
 const todoSchema = new Schema({
   title: {
     type: String,
-    required: true,
+    required: [true, "عنوان را وارد کنید."],
   },
   content: {
     type: String,
-    required: true,
+    required: [true, "محتوا را وارد کنید."],
   },
   date_added: { type: Date, default: Date.now },
   date_completed: { type: Date, default: null },
@@ -22,7 +22,10 @@ const todoSchema = new Schema({
     string: String,
   },
   label: String,
-  user_id: Number,
+  user_id: {
+    type: Number,
+    required: [true, "آیدی کاربری ارسال نشده است."]
+  },
 });
 
 const Todo = mongoose.model("Todo", todoSchema);

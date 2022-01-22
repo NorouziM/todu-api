@@ -8,5 +8,5 @@ export const connectDB = () => {
         `Server connected to database! on ${connection.connection.host}`
       );
     })
-    .catch((err) => console.log(err.reason));
+    .catch((err) => console.log(err));
 };
