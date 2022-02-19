@@ -11,10 +11,10 @@ const todoSchema = new Schema({
     type: String,
     required: [true, "محتوا را وارد کنید."],
   },
-  date_added: { type: Date, default: Date.now },
-  date_completed: { type: Date, default: null },
-  is_done: { type: Boolean, default: false },
-  due_date: {
+  dateAdded: { type: Date, default: Date.now },
+  dateCompleted: { type: Date, default: null },
+  isDone: { type: Boolean, default: false },
+  dueDate: {
     data: {
       type: Date,
       default: Date.now,
@@ -22,9 +22,9 @@ const todoSchema = new Schema({
     string: String,
   },
   label: String,
-  user_id: {
+  userId: {
     type: Number,
-    required: [true, "آیدی کاربری ارسال نشده است."]
+    required: [true, "آیدی کاربری ارسال نشده است."],
   },
 });
 

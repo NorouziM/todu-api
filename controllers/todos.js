@@ -1,5 +1,5 @@
 import Todo from "../models/Todo.js";
-import asyncHandler from 'express-async-handler'
+import asyncHandler from "express-async-handler";
 
 /**
  * @description Create Todo
@@ -7,8 +7,8 @@ import asyncHandler from 'express-async-handler'
  * @route POST /api/v1/todos/
  */
 
-export const createTodo = asyncHandler( async (req, res) => {
-  const todo = await Todo.create(req.body)
+export const createTodo = asyncHandler(async (req, res) => {
+  const todo = await Todo.create(req.body);
   res.status(201).json({
     status: "success",
     data: {
@@ -24,19 +24,11 @@ export const createTodo = asyncHandler( async (req, res) => {
  */
 
 export const getTodos = asyncHandler(async (req, res) => {
-  const { page = 1, page_size = 10 } = req.query;
-  const reqQuery = {...req.query};
-  const sortBy = reqQuery.sort || "-date_added";
-  const {search = ""} = req.query;
-  const todos = await Todo.find({$or:[{title: { "$regex": search, "$options": "i" }},{content: { "$regex": search, "$options": "i" }}]}).limit(Number(page_size)).skip(Number(page_size) * (Number(page) - 1)).sort(sortBy);
-  
-  
-  const count = await Todo.countDocuments();
   res.json({
-    count,
+    count: res.locals.advancedResults.count,
     status: "success",
     data: {
-      todos,
+      todos: res.locals.advancedResults.results,
     },
   });
 });
@@ -47,22 +39,22 @@ export const getTodos = asyncHandler(async (req, res) => {
  * @route GET /api/v1/todos/:id
  */
 
-export const getTodo = asyncHandler( async (req, res, next) => {
-  const todo = await Todo.findById(req.params.id)
-  if(!todo)
-  return res.status(400).json({
-    status: "fail",
-    data: {
-      message: "یافت نشد.",
-    },
-  });
-
-    res.json({
-      status: "success",
+export const getTodo = asyncHandler(async (req, res, next) => {
+  const todo = await Todo.findById(req.params.id);
+  if (!todo)
+    return res.status(400).json({
+      status: "fail",
       data: {
-        todo,
+        message: "یافت نشد.",
       },
     });
+
+  res.json({
+    status: "success",
+    data: {
+      todo,
+    },
+  });
 });
 
 /**
@@ -109,21 +101,20 @@ export const updateTodo = (req, res) => {
  * @returns {object}
  */
 
-export const deleteTodo = asyncHandler(async(req, res) => {
-  const todo  = Todo.findOneAndDelete({ id: req.params.id })
+export const deleteTodo = asyncHandler(async (req, res) => {
+  const todo = Todo.findOneAndDelete({ id: req.params.id });
 
   if (!todo)
-        return res.status(400).json({
-          status: "fail",
-          data: {
-            message: "Not Found",
-          },
-        });
-        res.json({
-          status: "success",
-          data: {
-            message: "Todo deleted",
-          },
-        });
-    
-})
+    return res.status(400).json({
+      status: "fail",
+      data: {
+        message: "Not Found",
+      },
+    });
+  res.json({
+    status: "success",
+    data: {
+      message: "Todo deleted",
+    },
+  });
+});

@@ -1,15 +1,12 @@
 import { Router } from "express";
+import { register, getUsers, deleteUser } from "../controllers/users.js";
+import { advancedResults } from "../middleware/advancedResults.js";
+import User from "../models/User.js";
 
 const router = Router();
 
-router.get("/:id", (req, res) => {
-  res.status("203").send(req.params.id);
-});
-
-router.get("/", (req, res) => {
-  res.status("200").json({
-    data: "some",
-  });
-});
+router.route("/register").post(register);
+router.route("/users").get(advancedResults(User), getUsers);
+router.route("/users/:id").delete(deleteUser);
 
 export default router;
