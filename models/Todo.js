@@ -23,7 +23,7 @@ const todoSchema = new Schema({
   },
   label: String,
   userId: {
-    type: Number,
+    type: String,
     required: [true, "آیدی کاربری ارسال نشده است."],
   },
 });

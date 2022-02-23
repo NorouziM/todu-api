@@ -1,6 +1,9 @@
+import { connectDB } from "../utils/db.js";
 const errorHandler = (error, _, res, next) => {
   const errorMessagesObject = getErrorMessages(error);
   console.log(error.name, "error.name", error);
+
+  if (error.name === "MongooseError") connectDB();
 
   if (
     error.name === "MongoServerError" ||
@@ -36,7 +39,7 @@ export default errorHandler;
 const getErrorMessages = (error) => {
   const errorMessages = {};
   for (const key in error.errors) {
-    errorMessages[key] = error.errors[key].properties.message;
+    errorMessages[key] = error.errors[key].properties?.message;
   }
 
   if (error.name === "CastError")

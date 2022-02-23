@@ -8,6 +8,7 @@ import asyncHandler from "express-async-handler";
  */
 
 export const createTodo = asyncHandler(async (req, res) => {
+  req.body.userId = req.user;
   const todo = await Todo.create(req.body);
   res.status(201).json({
     status: "success",
@@ -34,25 +35,16 @@ export const getTodos = asyncHandler(async (req, res) => {
 });
 
 /**
- * @description Get one Todo
+ * @description Get a user's Todos
  * @access Private
- * @route GET /api/v1/todos/:id
+ * @route GET /api/v1/todos/user
  */
-
-export const getTodo = asyncHandler(async (req, res, next) => {
-  const todo = await Todo.findById(req.params.id);
-  if (!todo)
-    return res.status(400).json({
-      status: "fail",
-      data: {
-        message: "یافت نشد.",
-      },
-    });
-
+export const getUserTodos = asyncHandler(async (req, res) => {
+  const todos = await Todo.find({ userId: req.user });
   res.json({
     status: "success",
     data: {
-      todo,
+      todos,
     },
   });
 });
@@ -60,11 +52,11 @@ export const getTodo = asyncHandler(async (req, res, next) => {
 /**
  * @description Update one todo
  * @access Private
- * @route PUT /api/v1/todos/:id
+ * @route PUT /api/v1/todos/user/:id
  */
 
 export const updateTodo = (req, res) => {
-  Todo.findOneAndUpdate({ id: req.params.id }, req.body, {
+  Todo.findOneAndUpdate({ id: req.params.id, userId: req.user }, req.body, {
     new: true,
     runValidators: true,
   })

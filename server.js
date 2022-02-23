@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/error.js";
 import users from "./routes/users.js";
 import todos from "./routes/todos.js";
@@ -13,6 +14,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use("/api/v1/auth", users);
 app.use("/api/v1/todos", todos);
 app.use(errorHandler);

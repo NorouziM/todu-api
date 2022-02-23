@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import asyncHandler from "express-async-handler";
+import { sendtokenInCookie } from "../utils/auth.js";
 
 /**
  * @description register user
@@ -9,13 +10,65 @@ import asyncHandler from "express-async-handler";
  */
 
 export const register = asyncHandler(async (req, res, next) => {
+  delete req.body.role;
   const user = await User.create(req.body);
 
-  res.status(201).json({
+  sendtokenInCookie(res, user.getUserToken(), 200);
+});
+
+/**
+ * @description login user
+ * @route POST /api/v1/auth/login
+ * @access Public
+ */
+
+export const login = asyncHandler(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email }).select("+password");
+
+  if (!user)
+    res.status(401).json({
+      status: "fail",
+      data: {
+        message: "اطلاعات ورود اشتباه است.",
+      },
+    });
+
+  const isMatch = await user.matchPassword(password);
+
+  if (!isMatch)
+    res.status(401).json({
+      status: "fail",
+      data: {
+        message: "اطلاعات ورود اشتباه است.",
+      },
+    });
+
+  sendtokenInCookie(res, user.getUserToken(), 200);
+});
+
+/**
+ * @description Get current user data
+ * @route GET /api/v1/auth/me
+ * @access Private
+ */
+
+export const getCurrentUserData = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user);
+
+  if (!user)
+    return res.status(404).json({
+      status: "fail",
+      data: {
+        message: "کاربر یافت نشد.",
+      },
+    });
+
+  res.status(200).json({
     status: "success",
     data: {
-      ...user.email,
-      ...user._id,
+      user,
     },
   });
 });
