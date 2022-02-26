@@ -40,9 +40,27 @@ export const getTodos = asyncHandler(async (req, res) => {
  * @route GET /api/v1/todos/user
  */
 export const getUserTodos = asyncHandler(async (req, res) => {
-  const todos = await Todo.find({ userId: req.user });
+  const { page = 1, page_size = 10 } = req.query;
+  const reqQuery = { ...req.query };
+  const sortBy = reqQuery.sort || "-date_added";
+  const { search = "" } = req.query;
+
+  const todos = await Todo.find({
+    userId: req.user,
+    $or: [
+      { title: { $regex: search, $options: "i" } },
+      { content: { $regex: search, $options: "i" } },
+    ],
+  })
+    .limit(Number(page_size))
+    .skip(Number(page_size) * (Number(page) - 1))
+    .sort(sortBy);
+
+  const totalCount = await Todo.countDocuments({ userId: req.user });
+
   res.json({
     status: "success",
+    count: totalCount,
     data: {
       todos,
     },
