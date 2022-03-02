@@ -1,0 +1,17 @@
+{
+    "EMAIL_IS_REQUIRED": "Email is required.",
+    "FIRST_NAME_IS_REQUIRED": "First name is required.",
+    "LAST_NAME_IS_REQUIRED": "Last name is required.",
+    "PASSWORD_IS_REQUIRED": "Password is required.",
+    "TITLE_IS_REQUIRED": "Title is required.",
+    "CONTENT_IS_REQUIRED": "Content is required.",
+    "INVALID_USERID": "Invalid user id.",
+    "INVALID_EMAIL": "Invalid email.",
+    "DUPLICATE_ERROR": "Is Aleady Exist: ",
+    "SERVER_ERROR": "Something went wrong in server.",
+    "GENERAL_ERROR": "Something went wrong.",
+    "INVALID_INPUTS": "Invalid Input.",
+    "ACCESS_DENIED": "Access Denied.",
+    "NOT_FOUND": "Not Found.",
+    "TODO_DELETED": "Todo deleted successfully."
+}

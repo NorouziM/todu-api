@@ -1,0 +1,18 @@
+{
+    "EMAIL_IS_REQUIRED": "اییمل را وارد کنید.",
+    "FIRST_NAME_IS_REQUIRED": "نام را وارد کنید.",
+    "LAST_NAME_IS_REQUIRED": "نام خانوادگی را وارد کنید.",
+    "PASSWORD_IS_REQUIRED": "رمز عبور را وارد کنید.",
+    "TITLE_IS_REQUIRED": "عنوان را وارد کنید.",
+    "CONTENT_IS_REQUIRED": "محتوا را وارد کنید.",
+    "INVALID_USERID": "آیدی کاربری ارسال نشده است.",
+    "INVALID_EMAIL": "لطفا ایمیل معتبر وارد کنید.",
+    "DUPLICATE_ERROR": ".قبلا ثبت شده است ",
+    "SERVER_ERROR": "مشکلی در سرور پیش آمده است.",
+    "GENERAL_ERROR": "خطایی رخ داده است.",
+    "AUTH_ERROR": "احراز هویت انجام نشده‌ است.",
+    "INVALID_INPUTS":"مقادیر وارد شده در فیلد معتبر نیست.",
+    "ACCESS_DENIED":"دسترسی غیر مجاز",
+    "NOT_FOUND":"موردی یافت نشد",
+    "TODO_DELETED": "تودو با موفقیت حذف شد."
+}

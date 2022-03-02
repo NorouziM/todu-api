@@ -1,49 +1,56 @@
-import { connectDB } from "../utils/db.js";
-const errorHandler = (error, _, res, next) => {
-  const errorMessagesObject = getErrorMessages(error);
-  console.log(error.name, "error.name", error);
+import { connectDB } from '../utils/db.js';
+import { getTranslatedText } from '../utils/i18n.js';
 
-  if (error.name === "MongooseError") connectDB();
+const errorHandler = (error, req, res, next) => {
+  console.log(req.i18n_texts);
+  const errorMessagesObject = getErrorMessages(error, req);
+  console.log(error.name, 'error.name', error);
+
+  if (error.name === 'MongooseError') connectDB();
 
   if (
-    error.name === "MongoServerError" ||
-    error.name === "MongoError" ||
-    error.name === "TypeError" ||
-    error.name === "ReferenceError"
+    error.name === 'MongoServerError' ||
+    error.name === 'MongoError' ||
+    error.name === 'TypeError' ||
+    error.name === 'ReferenceError'
   ) {
     if (error.code === 11000)
       return res.status(400).json({
-        status: "fail",
+        status: 'fail',
         data: {
-          message: ".قبلا ثبت شده است " + Object.keys(error.keyValue)[0],
+          message:
+            getTranslatedText(req, 'DUPLICATE_ERROR') +
+            Object.keys(error.keyValue)[0],
         },
       });
 
     return res.status(500).json({
-      status: "error",
+      status: 'error',
       data: {
-        message: "مشکلی در سرور پیش آمده است.",
+        message: getTranslatedText(req, 'SERVER_ERROR'),
       },
     });
   }
   res.status(400).json({
-    status: "fail",
+    status: 'fail',
     data: {
-      message: errorMessagesObject || "خطایی رخ داده است.",
+      message: errorMessagesObject || getTranslatedText(req, 'GENERAL_ERROR'),
     },
   });
 };
 
 export default errorHandler;
 
-const getErrorMessages = (error) => {
+const getErrorMessages = (error, req) => {
   const errorMessages = {};
   for (const key in error.errors) {
-    errorMessages[key] = error.errors[key].properties?.message;
+    errorMessages[key] =
+      getTranslatedText(req, error.errors[key].properties?.message) ||
+      error.errors[key].properties?.message;
   }
 
-  if (error.name === "CastError")
-    errorMessages.CastError = "مقادیر وارد شده در فیلد معتبر نیست.";
+  if (error.name === 'CastError')
+    errorMessages.CastError = getTranslatedText(req, 'INVALID_INPUTS');
 
   return errorMessages;
 };

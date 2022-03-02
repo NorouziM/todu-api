@@ -1,46 +1,43 @@
-import mongoose from "mongoose";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
   firstName: {
     type: String,
-    required: [true, "نام را وارد کنید."],
+    required: [true, 'FIRST_NAME_IS_REQUIRED'],
   },
   lastName: {
     type: String,
-    required: [true, "نام خانوادگی را وارد کنید."],
+    required: [true, 'LAST_NAME_IS_REQUIRED'],
   },
   email: {
     type: String,
     trim: true,
     lowercase: true,
     unique: true,
-    required: [true, "ایمیل را وارد کنید."],
-    match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      "لطفا ایمیل معتبر وارد کنید.",
-    ],
+    required: [true, 'EMAIL_IS_REQUIRED'],
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'INVALID_EMAIL'],
   },
   password: {
     type: String,
-    required: [true, "پسورد را وارد کنید."],
+    required: [true, 'PASSWORD_IS_REQUIRED'],
     select: false,
     minlength: 6,
   },
   role: {
     type: String,
-    enum: ["user", "admin"],
-    default: "user",
+    enum: ['user', 'admin'],
+    default: 'user',
   },
   dateAdded: { type: Date, default: Date.now },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 });
 
-userSchema.pre("save", async function () {
+userSchema.pre('save', async function () {
   const salt = await bcrypt.genSalt(10);
 
   this.password = await bcrypt.hash(this.password, salt);
@@ -57,6 +54,6 @@ userSchema.methods.matchPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 export default User;

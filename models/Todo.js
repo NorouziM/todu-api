@@ -1,15 +1,15 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
 const todoSchema = new Schema({
   title: {
     type: String,
-    required: [true, "عنوان را وارد کنید."],
+    required: [true, 'TITLE_IS_REQUIRED'],
   },
   content: {
     type: String,
-    required: [true, "محتوا را وارد کنید."],
+    required: [true, 'CONTENT_IS_REQUIRED'],
   },
   dateAdded: { type: Date, default: Date.now },
   dateCompleted: { type: Date, default: null },
@@ -24,10 +24,10 @@ const todoSchema = new Schema({
   label: String,
   userId: {
     type: String,
-    required: [true, "آیدی کاربری ارسال نشده است."],
+    required: [true, 'INVALID_USERID'],
   },
 });
 
-const Todo = mongoose.model("Todo", todoSchema);
+const Todo = mongoose.model('Todo', todoSchema);
 
 export default Todo;

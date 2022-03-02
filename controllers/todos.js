@@ -1,5 +1,6 @@
-import Todo from "../models/Todo.js";
-import asyncHandler from "express-async-handler";
+import Todo from '../models/Todo.js';
+import asyncHandler from 'express-async-handler';
+import { getTranslatedText } from '../utils/i18n.js';
 
 /**
  * @description Create Todo
@@ -11,7 +12,7 @@ export const createTodo = asyncHandler(async (req, res) => {
   req.body.userId = req.user;
   const todo = await Todo.create(req.body);
   res.status(201).json({
-    status: "success",
+    status: 'success',
     data: {
       todo,
     },
@@ -27,7 +28,7 @@ export const createTodo = asyncHandler(async (req, res) => {
 export const getTodos = asyncHandler(async (req, res) => {
   res.json({
     count: res.locals.advancedResults.count,
-    status: "success",
+    status: 'success',
     data: {
       todos: res.locals.advancedResults.results,
     },
@@ -42,14 +43,14 @@ export const getTodos = asyncHandler(async (req, res) => {
 export const getUserTodos = asyncHandler(async (req, res) => {
   const { page = 1, page_size = 10 } = req.query;
   const reqQuery = { ...req.query };
-  const sortBy = reqQuery.sort || "-date_added";
-  const { search = "" } = req.query;
+  const sortBy = reqQuery.sort || '-date_added';
+  const { search = '' } = req.query;
 
   const todos = await Todo.find({
     userId: req.user,
     $or: [
-      { title: { $regex: search, $options: "i" } },
-      { content: { $regex: search, $options: "i" } },
+      { title: { $regex: search, $options: 'i' } },
+      { content: { $regex: search, $options: 'i' } },
     ],
   })
     .limit(Number(page_size))
@@ -59,7 +60,7 @@ export const getUserTodos = asyncHandler(async (req, res) => {
   const totalCount = await Todo.countDocuments({ userId: req.user });
 
   res.json({
-    status: "success",
+    status: 'success',
     count: totalCount,
     data: {
       todos,
@@ -81,14 +82,14 @@ export const updateTodo = (req, res) => {
     .then((todo) => {
       if (!todo)
         return res.status(400).json({
-          status: "fail",
+          status: 'fail',
           data: {
-            message: "Not Found",
+            message: getTranslatedText(req, 'NOT_FOUND'),
           },
         });
 
       res.json({
-        status: "success",
+        status: 'success',
         data: {
           todo,
         },
@@ -96,7 +97,7 @@ export const updateTodo = (req, res) => {
     })
     .catch((error) => {
       res.status(400).json({
-        status: "fail",
+        status: 'fail',
         data: {
           message: error.message,
         },
@@ -116,15 +117,15 @@ export const deleteTodo = asyncHandler(async (req, res) => {
 
   if (!todo)
     return res.status(400).json({
-      status: "fail",
+      status: 'fail',
       data: {
-        message: "Not Found",
+        message: getTranslatedText(req, 'NOT_FOUND'),
       },
     });
   res.json({
-    status: "success",
+    status: 'success',
     data: {
-      message: "Todo deleted",
+      message: getTranslatedText(req, 'TODO_DELETED'),
     },
   });
 });

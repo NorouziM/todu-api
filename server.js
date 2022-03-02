@@ -1,13 +1,19 @@
+// npm
 import express from 'express';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
+import i18n from 'i18n-express';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 import hpp from 'hpp';
+import * as path from 'path';
+// middleware
 import errorHandler from './middleware/error.js';
+// routes
 import users from './routes/users.js';
 import todos from './routes/todos.js';
+// config
 import { connectDB } from './utils/db.js';
 
 dotenv.config();
@@ -22,12 +28,21 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
-app.use(helmet);
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
 app.use(hpp());
 app.use(cookieParser());
+app.use(
+  i18n({
+    translationsPath: path.join(path.resolve(path.dirname('')), 'locales'),
+    siteLangs: ['en', 'fa'],
+    textsVarName: 'translation',
+    defaultLang: 'fa',
+  })
+);
+
 app.use('/api/v1/auth', users);
 app.use('/api/v1/todos', todos);
 app.use(errorHandler);
