@@ -14,5 +14,9 @@
     "INVALID_INPUTS":"مقادیر وارد شده در فیلد معتبر نیست.",
     "ACCESS_DENIED":"دسترسی غیر مجاز",
     "NOT_FOUND":"موردی یافت نشد",
-    "TODO_DELETED": "تودو با موفقیت حذف شد."
+    "TODO_DELETED": "تودو با موفقیت حذف شد.",
+    "WRONG_CREDENTIALS": "اطلاعات ورود اشتباه است.",
+    "USER_NOT_FOUND": "کاربری یافت نشد.",
+    "NO_EMAIL_OR_PASSWORD": "ایمیل و پسورد را وارد نمایید."
+
 }

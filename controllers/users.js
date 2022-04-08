@@ -1,6 +1,7 @@
-import User from "../models/User.js";
-import asyncHandler from "express-async-handler";
-import { sendtokenInCookie } from "../utils/auth.js";
+import User from '../models/User.js';
+import asyncHandler from 'express-async-handler';
+import { sendtokenInCookie } from '../utils/auth.js';
+import { getTranslatedText } from '../utils/i18n.js';
 
 /**
  * @description register user
@@ -25,23 +26,31 @@ export const register = asyncHandler(async (req, res, next) => {
 export const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email }).select("+password");
+  const user = await User.findOne({ email }).select('+password');
+
+  if (!email || !password)
+    return res.status(401).json({
+      status: 'fail',
+      data: {
+        message: getTranslatedText(req, 'NO_EMAIL_OR_PASSWORD'),
+      },
+    });
 
   if (!user)
-    res.status(401).json({
-      status: "fail",
+    return res.status(401).json({
+      status: 'fail',
       data: {
-        message: "اطلاعات ورود اشتباه است.",
+        message: getTranslatedText(req, 'WRONG_CREDENTIALS'),
       },
     });
 
   const isMatch = await user.matchPassword(password);
 
   if (!isMatch)
-    res.status(401).json({
-      status: "fail",
+    return res.status(401).json({
+      status: 'fail',
       data: {
-        message: "اطلاعات ورود اشتباه است.",
+        message: getTranslatedText(req, 'WRONG_CREDENTIALS'),
       },
     });
 
@@ -59,14 +68,14 @@ export const getCurrentUserData = asyncHandler(async (req, res, next) => {
 
   if (!user)
     return res.status(404).json({
-      status: "fail",
+      status: 'fail',
       data: {
-        message: "کاربر یافت نشد.",
+        message: getTranslatedText(req, 'USER_NOT_FOUND'),
       },
     });
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     data: {
       user,
     },
@@ -81,7 +90,7 @@ export const getCurrentUserData = asyncHandler(async (req, res, next) => {
 export const getUsers = asyncHandler(async (req, res, next) => {
   res.json({
     count: res.locals.advancedResults.count,
-    status: "success",
+    status: 'success',
     data: {
       users: res.locals.advancedResults.results,
     },
@@ -98,7 +107,7 @@ export const deleteUser = asyncHandler(async (req, res, next) => {
   await User.findByIdAndDelete(req.params.id);
 
   res.json({
-    status: "success",
+    status: 'success',
     data: null,
   });
 });

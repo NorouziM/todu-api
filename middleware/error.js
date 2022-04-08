@@ -2,9 +2,7 @@ import { connectDB } from '../utils/db.js';
 import { getTranslatedText } from '../utils/i18n.js';
 
 const errorHandler = (error, req, res, next) => {
-  console.log(req.i18n_texts);
   const errorMessagesObject = getErrorMessages(error, req);
-  console.log(error.name, 'error.name', error);
 
   if (error.name === 'MongooseError') connectDB();
 

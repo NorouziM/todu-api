@@ -29,6 +29,16 @@ const limiter = rateLimit({
 
 app.use(limiter);
 app.use(helmet());
+app.use((ـ, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Content-Type,Authorization,accept-language'
+  );
+
+  next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
