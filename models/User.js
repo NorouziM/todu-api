@@ -32,6 +32,15 @@ const userSchema = new Schema({
     enum: ['user', 'admin'],
     default: 'user',
   },
+  phoneNumber: {
+    required: [true, 'PHONE_NUMBER_IS_REQUIRED'],
+    type: String,
+    default: null,
+  },
+  avatarUrl: {
+    type: String,
+    default: null,
+  },
   dateAdded: { type: Date, default: Date.now },
   resetPasswordToken: String,
   resetPasswordExpire: Date,

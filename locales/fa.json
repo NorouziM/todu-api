@@ -3,6 +3,7 @@
     "FIRST_NAME_IS_REQUIRED": "نام را وارد کنید.",
     "LAST_NAME_IS_REQUIRED": "نام خانوادگی را وارد کنید.",
     "PASSWORD_IS_REQUIRED": "رمز عبور را وارد کنید.",
+    "PHONE_NUMBER_IS_REQUIRED": "شماره تلفن را وارد کنید.",
     "TITLE_IS_REQUIRED": "عنوان را وارد کنید.",
     "CONTENT_IS_REQUIRED": "محتوا را وارد کنید.",
     "INVALID_USERID": "آیدی کاربری ارسال نشده است.",
