@@ -15,6 +15,7 @@
     "ACCESS_DENIED": "Access Denied.",
     "NOT_FOUND": "Not Found.",
     "TODO_DELETED": "Todo deleted successfully.",
+    "COLLECTION_DELETED": "Collection deleted successfully.",
     "WRONG_CREDENTIALS": "Wrong credentials.",
     "USER_NOT_FOUND": "User not found.",
     "NO_EMAIL_OR_PASSWORD": "Enter email and password."

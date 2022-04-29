@@ -4,6 +4,8 @@ import { getTranslatedText } from '../utils/i18n.js';
 const errorHandler = (error, req, res, next) => {
   const errorMessagesObject = getErrorMessages(error, req);
 
+  console.log(error, 'error');
+
   if (error.name === 'MongooseError') connectDB();
 
   if (

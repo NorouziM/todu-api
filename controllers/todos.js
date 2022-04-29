@@ -71,39 +71,33 @@ export const getUserTodos = asyncHandler(async (req, res) => {
 /**
  * @description Update one todo
  * @access Private
- * @route PUT /api/v1/todos/user/:id
+ * @route PUT /api/v1/todos/:id
  */
 
-export const updateTodo = (req, res) => {
-  Todo.findOneAndUpdate({ id: req.params.id, userId: req.user }, req.body, {
-    new: true,
-    runValidators: true,
-  })
-    .then((todo) => {
-      if (!todo)
-        return res.status(400).json({
-          status: 'fail',
-          data: {
-            message: getTranslatedText(req, 'NOT_FOUND'),
-          },
-        });
-
-      res.json({
-        status: 'success',
-        data: {
-          todo,
-        },
-      });
-    })
-    .catch((error) => {
-      res.status(400).json({
-        status: 'fail',
-        data: {
-          message: error.message,
-        },
-      });
+export const updateTodo = asyncHandler(async (req, res) => {
+  const todo = await Todo.findOne({ _id: req.params.id, userId: req.user });
+  if (!todo)
+    return res.status(400).json({
+      status: 'fail',
+      data: {
+        message: getTranslatedText(req, 'NOT_FOUND'),
+      },
     });
-};
+
+  todo.title = req.body.title || todo.title;
+  todo.content = req.body.content || todo.content;
+  todo.dateCompleted = req.body.dateCompleted || todo.dateCompleted;
+  todo.isDone = req.body.isDone || todo.isDone;
+
+  await todo.save();
+
+  res.json({
+    status: 'success',
+    data: {
+      todo,
+    },
+  });
+});
 
 /**
  * @description Delete one todo
@@ -113,19 +107,20 @@ export const updateTodo = (req, res) => {
  */
 
 export const deleteTodo = asyncHandler(async (req, res) => {
-  const todo = Todo.findOneAndDelete({ id: req.params.id });
-
-  if (!todo)
-    return res.status(400).json({
-      status: 'fail',
-      data: {
-        message: getTranslatedText(req, 'NOT_FOUND'),
-      },
-    });
-  res.json({
-    status: 'success',
-    data: {
-      message: getTranslatedText(req, 'TODO_DELETED'),
-    },
+  Todo.findByIdAndRemove(req.params.id, (err) => {
+    if (err)
+      return res.status(400).json({
+        status: 'fail',
+        data: {
+          message: getTranslatedText(req, 'NOT_FOUND'),
+        },
+      });
+    else
+      return res.json({
+        status: 'success',
+        data: {
+          message: getTranslatedText(req, 'TODO_DELETED'),
+        },
+      });
   });
 });

@@ -13,6 +13,7 @@ import errorHandler from './middleware/error.js';
 // routes
 import users from './routes/users.js';
 import todos from './routes/todos.js';
+import collections from './routes/collections.js';
 // config
 import { connectDB } from './utils/db.js';
 
@@ -55,6 +56,7 @@ app.use(
 
 app.use('/api/v1/auth', users);
 app.use('/api/v1/todos', todos);
+app.use('/api/v1/collection', collections);
 app.use(errorHandler);
 
 const server = app.listen(process.env.PORT);

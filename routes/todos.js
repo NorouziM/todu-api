@@ -6,6 +6,7 @@ import {
   getTodos,
   getUserTodos,
   updateTodo,
+  deleteTodo,
 } from '../controllers/todos.js';
 // middleware
 import { advancedResults } from '../middleware/advancedResults.js';
@@ -20,7 +21,8 @@ router
   .route('/')
   .post(authGuard, createTodo)
   .get(authGuard, adminGuard, advancedResults(Todo), getTodos);
-router.route('/user/:id').put(authGuard, updateTodo);
+
+router.route('/:id').delete(authGuard, deleteTodo).put(authGuard, updateTodo);
 
 router.route('/user').get(authGuard, advancedResults(Todo), getUserTodos);
 
