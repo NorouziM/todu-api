@@ -26,8 +26,7 @@ const collectionSchema = new Schema({
     default: 0,
   },
   todos: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Todo',
+    type: Array,
   },
 });
 

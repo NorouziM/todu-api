@@ -18,7 +18,7 @@ const todoSchema = new Schema({
   dueDate: {
     data: {
       type: Date,
-      default: Date.now,
+      default: null,
     },
     string: String,
   },
@@ -77,8 +77,6 @@ todoSchema.statics.getDoneTodosPercentage = async function (
     collection.doneTodosPercentage = percentage;
     collection.totalTodos = obj[0].totalTodos;
     collection.doneTodos = obj[0].doneTodos;
-
-    console.log(collection, 'collection');
 
     await collection.save();
   } catch (err) {
