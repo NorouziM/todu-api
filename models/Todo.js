@@ -16,11 +16,8 @@ const todoSchema = new Schema({
   dateCompleted: { type: Date, default: null },
   isDone: { type: Boolean, default: false },
   dueDate: {
-    data: {
-      type: Date,
-      default: null,
-    },
-    string: String,
+    type: Date,
+    default: null,
   },
   label: String,
   userId: {

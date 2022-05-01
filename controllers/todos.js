@@ -1,6 +1,8 @@
 import Todo from '../models/Todo.js';
 import asyncHandler from 'express-async-handler';
 import { getTranslatedText } from '../utils/i18n.js';
+import startOfDay from 'date-fns/startOfDay/index.js';
+import endOfDay from 'date-fns/endOfDay/index.js';
 
 /**
  * @description Create Todo
@@ -36,6 +38,56 @@ export const getTodos = asyncHandler(async (req, res) => {
 });
 
 /**
+ * @description Get all collection Todos
+ * @access Private
+ * @route GET /api/v1/todos/:id
+ */
+
+export const getCollectionTodos = asyncHandler(async (req, res) => {
+  const { page = 1, page_size = 10, type = 'today' } = req.query;
+  const getSelectionDate = () => {
+    if (type === 'today') return endOfDay(new Date());
+    if (type === 'next7Days')
+      return startOfDay(
+        new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
+      );
+    if (type === 'inbox') return null;
+    return null;
+  };
+  const reqQuery = { ...req.query };
+  const sortBy = reqQuery.sort || '-dateAdded';
+  const results = await Todo.find({
+    collectionId: req.params.id,
+    userId: req.user,
+    ...(getSelectionDate() && {
+      dueDate: {
+        $lte: getSelectionDate(),
+      },
+    }),
+  })
+    .limit(Number(page_size))
+    .skip(Number(page_size) * (Number(page) - 1))
+    .sort(sortBy);
+  const count = await Todo.countDocuments({
+    collectionId: req.params.id,
+    userId: req.user,
+    ...(getSelectionDate() && {
+      dueDate: {
+        $lte: getSelectionDate(),
+      },
+    }),
+  });
+
+  res.json({
+    count,
+    status: 'success',
+    data: {
+      todos: results,
+    },
+  });
+});
+
+/**
  * @description Get a user's Todos
  * @access Private
  * @route GET /api/v1/todos/user
@@ -43,7 +95,7 @@ export const getTodos = asyncHandler(async (req, res) => {
 export const getUserTodos = asyncHandler(async (req, res) => {
   const { page = 1, page_size = 10 } = req.query;
   const reqQuery = { ...req.query };
-  const sortBy = reqQuery.sort || '-date_added';
+  const sortBy = reqQuery.sort || '-dateAdded';
   const { search = '' } = req.query;
 
   const todos = await Todo.find({

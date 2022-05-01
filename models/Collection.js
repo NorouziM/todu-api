@@ -9,6 +9,7 @@ const collectionSchema = new Schema({
     required: [true, 'TITLE_IS_REQUIRED'],
   },
   dateAdded: { type: Date, default: Date.now },
+  dateUpdated: { type: Date, default: Date.now },
   userId: {
     type: String,
     required: [true, 'INVALID_USERID'],
@@ -34,6 +35,7 @@ collectionSchema.pre('save', async function () {
   if (this._id) {
     const todos = await Todo.find({ collectionId: this._id });
     this.todos = todos;
+    this.dateUpdated = Date.now();
   }
 });
 

@@ -26,9 +26,19 @@ export const createCollection = asyncHandler(async (req, res) => {
  */
 
 export const getCollections = asyncHandler(async (req, res) => {
-  const collections = await Collection.find({ userId: req.user });
+  const { page = 1, page_size = 10 } = req.query;
+
+  const reqQuery = { ...req.query };
+  const sortBy = reqQuery.sort || '-dateUpdated';
+  const collections = await Collection.find({ userId: req.user })
+    .limit(Number(page_size))
+    .skip(Number(page_size) * (Number(page) - 1))
+    .sort(sortBy);
+  const count = await Collection.countDocuments({ userId: req.user });
+
   res.status(200).json({
     status: 'success',
+    count,
     data: {
       collections,
     },
