@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Collection from './Collection.js';
 
 const { Schema } = mongoose;
 
@@ -51,6 +52,14 @@ userSchema.pre('save', async function () {
   const salt = await bcrypt.genSalt(10);
 
   this.password = await bcrypt.hash(this.password, salt);
+});
+
+userSchema.post('save', async function () {
+  const body = {
+    userId: this._id,
+    title: 'noCollection',
+  };
+  await Collection.create(body);
 });
 
 userSchema.methods.getUserToken = function () {

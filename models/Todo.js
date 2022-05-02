@@ -10,7 +10,6 @@ const todoSchema = new Schema({
   },
   content: {
     type: String,
-    required: [true, 'CONTENT_IS_REQUIRED'],
   },
   dateAdded: { type: Date, default: Date.now },
   dateCompleted: { type: Date, default: null },

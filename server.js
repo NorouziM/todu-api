@@ -8,6 +8,7 @@ import rateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 import hpp from 'hpp';
 import * as path from 'path';
+import cors from 'cors';
 // middleware
 import errorHandler from './middleware/error.js';
 // routes
@@ -22,29 +23,16 @@ dotenv.config();
 connectDB();
 
 const app = express();
+app.use(cors());
+app.options('*', cors());
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-});
-
-app.use(limiter);
-app.use(helmet());
-app.use((ـ, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Content-Type,Authorization,accept-language'
-  );
-
-  next();
-});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
-app.use(hpp());
 app.use(cookieParser());
+app.use(helmet());
+app.use(hpp());
+
 app.use(
   i18n({
     translationsPath: path.join(path.resolve(path.dirname('')), 'locales'),
