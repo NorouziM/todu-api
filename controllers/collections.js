@@ -113,3 +113,17 @@ export const deleteCollection = asyncHandler(async (req, res) => {
     }
   });
 });
+
+export const getSingleCollection = asyncHandler(async (req, res) => {
+  const collection = await Collection.findOne({
+    userId: req.user,
+    _id: req.params.id,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      collection,
+    },
+  });
+});

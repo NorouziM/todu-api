@@ -63,6 +63,7 @@ export const getCollectionTodos = asyncHandler(async (req, res) => {
       dueDate: {
         $lte: getSelectionDate(),
       },
+      isDone: false,
     }),
   })
     .limit(Number(page_size))
@@ -75,6 +76,7 @@ export const getCollectionTodos = asyncHandler(async (req, res) => {
       dueDate: {
         $lte: getSelectionDate(),
       },
+      isDone: false,
     }),
   });
 

@@ -6,6 +6,7 @@ import {
   updateCollection,
   getCollections,
   deleteCollection,
+  getSingleCollection,
 } from '../controllers/collections.js';
 // middleware
 import authGuard from '../middleware/authGuard.js';
@@ -18,6 +19,7 @@ router
   .get(authGuard, getCollections);
 router
   .route('/:id')
+  .get(authGuard, getSingleCollection)
   .put(authGuard, updateCollection)
   .delete(authGuard, deleteCollection);
 
